@@ -6,12 +6,10 @@ export default function Catalog() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // Estados para el formulario
   const [serviceName, setServiceName] = useState('');
   const [description, setDescription] = useState('');
   const [price, setPrice] = useState('');
 
-  // 1. Cargar las prestaciones al montar el componente
   useEffect(() => {
     fetchServices();
   }, []);
@@ -30,7 +28,6 @@ export default function Catalog() {
     }
   };
 
-  // 2. Manejar la creación de una nueva prestación
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -42,10 +39,8 @@ export default function Catalog() {
       };
 
       const created = await createService(newService);
-      // Agregamos el nuevo servicio a la lista sin recargar la página
       setServices([...services, created]); 
       
-      // Limpiar formulario
       setServiceName('');
       setDescription('');
       setPrice('');

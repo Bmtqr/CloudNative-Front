@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { PublicClientApplication } from '@azure/msal-browser';
-import { msalConfig, loginRequest } from '../authConfig';
+import { msalConfig, apiRequest } from '../authConfig';
 
 const msalInstance = new PublicClientApplication(msalConfig);
 
@@ -20,7 +20,7 @@ api.interceptors.request.use(
     if (accounts.length > 0) {
       try {
         const response = await msalInstance.acquireTokenSilent({
-          ...loginRequest,
+          ...apiRequest,
           account: accounts[0],
         });
 

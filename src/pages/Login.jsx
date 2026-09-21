@@ -8,20 +8,16 @@ export default function Login() {
   const isAuthenticated = useIsAuthenticated();
   const navigate = useNavigate();
 
-  // Si el usuario ya está autenticado, lo redirige directo al catálogo
   useEffect(() => {
     if (isAuthenticated) {
       navigate('/catalog');
     }
   }, [isAuthenticated, navigate]);
 
-  const handleLogin = async () => {
-    try {
-      await instance.loginPopup(loginRequest);
-      navigate('/catalog');
-    } catch (error) {
+  const handleLogin = () => {
+    instance.loginRedirect(loginRequest).catch((error) => {
       console.error("Error al iniciar sesión con Microsoft:", error);
-    }
+    });
   };
 
   return (
