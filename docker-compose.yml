@@ -1,0 +1,11 @@
+version: '3.8'
+
+services:
+  front-react:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: front-react
+    restart: unless-stopped
+    ports:
+      - "80:80"
