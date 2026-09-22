@@ -6,18 +6,13 @@ export default function Catalog() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-<<<<<<< HEAD
-  // Estados para el formulario
-=======
->>>>>>> aws
+
+
   const [serviceName, setServiceName] = useState('');
   const [description, setDescription] = useState('');
   const [price, setPrice] = useState('');
 
-<<<<<<< HEAD
-  // 1. Cargar las prestaciones al montar el componente
-=======
->>>>>>> aws
+
   useEffect(() => {
     fetchServices();
   }, []);
@@ -36,10 +31,7 @@ export default function Catalog() {
     }
   };
 
-<<<<<<< HEAD
-  // 2. Manejar la creación de una nueva prestación
-=======
->>>>>>> aws
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -51,15 +43,9 @@ export default function Catalog() {
       };
 
       const created = await createService(newService);
-<<<<<<< HEAD
-      // Agregamos el nuevo servicio a la lista sin recargar la página
+
       setServices([...services, created]); 
-      
-      // Limpiar formulario
-=======
-      setServices([...services, created]); 
-      
->>>>>>> aws
+
       setServiceName('');
       setDescription('');
       setPrice('');
