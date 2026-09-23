@@ -19,6 +19,7 @@ export default function Login() {
       console.error("Error al iniciar sesión con Microsoft:", error);
     });
   };
+  
 
   return (
     <div style={{
