@@ -1,8 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { useMsal } from "@azure/msal-react";
-import { jwtDecode } from "jwt-decode";
-import { apiRequest } from "../authConfig";
+import {fetchUserRoles} from "../utils/token";
 
 export const Navbar = () => {
   const { instance, accounts } = useMsal();
@@ -12,20 +11,13 @@ export const Navbar = () => {
   const [userRoles, setUserRoles] = useState([]);
 
   useEffect(() => {
-    if (accounts.length > 0) {
-      instance
-        .acquireTokenSilent({
-          ...apiRequest,
-          account: accounts[0],
-        })
-        .then((response) => {
-          const decodedToken = jwtDecode(response.accessToken);
-          setUserRoles(decodedToken.roles || []);
-        })
-        .catch((error) => {
-          console.error("Error al obtener el token del backend:", error);
-        });
-    }
+    const getUserRoles = async () => {
+      if (accounts.length > 0) {
+        const roles = await fetchUserRoles(instance, accounts[0]);
+        setUserRoles(roles);
+      }
+    };
+    getUserRoles();
   }, [instance, accounts]);
 
   const isAdmin = userRoles.includes("Admin");
@@ -77,7 +69,7 @@ export const Navbar = () => {
           </Link>
         )}
         {(isAdmin || isAuditor) && (
-          <Link to="/report" style={linkStyle("/report")}>
+          <Link to="/audit" style={linkStyle("/audit")}>
             Audit
           </Link>
         )}

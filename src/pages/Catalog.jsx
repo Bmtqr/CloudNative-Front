@@ -2,8 +2,7 @@ import { useState, useEffect } from "react";
 import { getServices, createService } from "../services/catalogService";
 
 import { useMsal } from "@azure/msal-react";
-import { jwtDecode } from "jwt-decode";
-import { apiRequest } from "../authConfig";
+import {fetchUserRoles} from "../utils/token";
 
 export default function Catalog() {
   const { instance, accounts } = useMsal();
@@ -17,21 +16,13 @@ export default function Catalog() {
   const [price, setPrice] = useState("");
 
   useEffect(() => {
-    if (accounts.length > 0) {
-      instance
-        .acquireTokenSilent({
-          ...apiRequest,
-          account: accounts[0],
-        })
-        .then((response) => {
-          const decodedToken = jwtDecode(response.accessToken);
-          const roles = decodedToken.roles || [];
-          setIsAdmin(roles.includes("Admin"));
-        })
-        .catch((err) =>
-          console.error("Error al verificar roles en catálogo:", err),
-        );
-    }
+    const getUserRoles = async () => {
+      if (accounts.length > 0) {
+        const roles = await fetchUserRoles(instance, accounts[0]);
+        setIsAdmin(roles.includes("Admin"));
+      }
+    };
+    getUserRoles();
     fetchServices();
   }, [instance, accounts]);
 

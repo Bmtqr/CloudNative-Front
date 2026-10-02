@@ -14,11 +14,6 @@ function ProtectedRoute({ children }) {
 
 export default function App() {
   const isAuthenticated = useIsAuthenticated();
-  const { instance, accounts } = useMsal();
-
-  const handleLogout = () => {
-    instance.logoutPopup();
-  };
 
   return (
     <Router>
