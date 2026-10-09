@@ -22,41 +22,13 @@ export default function Login() {
   
 
   return (
-    <div style={{
-      display: 'flex',
-      flexDirection: 'column',
-      alignItems: 'center',
-      justifyContent: 'center',
-      height: '80vh',
-      fontFamily: 'sans-serif'
-    }}>
-      <div style={{
-        padding: '40px',
-        borderRadius: '8px',
-        boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
-        backgroundColor: '#fff',
-        textAlign: 'center',
-        maxWidth: '400px'
-      }}>
-        <h2 style={{ color: '#2c3e50', marginBottom: '10px' }}>Plataforma VidaSalud</h2>
-        <p style={{ color: '#7f8c8d', marginBottom: '30px' }}>
+    <div style={{display: 'flex', alignItems: 'center', justifyContent: 'center',minHeight: '100vh'}}>
+      <div className="card" style={{width: '100%', textAlign: 'center', maxWidth: '400px'}}>
+        <h2 style={{ color: 'var(--text-h)', marginBottom: '10px', marginTop:0 }}>Plataforma VidaSalud</h2>
+        <p style={{ color: 'var(--text)', marginBottom: '32px' }}>
           Sistema unificado para gestión de atenciones clínicas
         </p>
-
-        <button
-          onClick={handleLogin}
-          style={{
-            padding: '12px 24px',
-            fontSize: '15px',
-            backgroundColor: '#0078d4',
-            color: 'white',
-            border: 'none',
-            borderRadius: '4px',
-            cursor: 'pointer',
-            fontWeight: 'bold',
-            width: '100%'
-          }}
-        >
+        <button className="btn-primary" onClick={handleLogin} style={{width: '100%'}}>
           Iniciar Sesión con Microsoft
         </button>
       </div>

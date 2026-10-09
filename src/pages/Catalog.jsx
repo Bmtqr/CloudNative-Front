@@ -65,65 +65,44 @@ export default function Catalog() {
     }
   };
 
-  if (loading) return <p>Cargando catálogo...</p>;
+  if (loading) return <div className="page-container"><p>Cargando catálogo...</p></div>;
 
   return (
-    <div style={{ padding: "20px", fontFamily: "sans-serif" }}>
-      <h2>Catálogo de Prestaciones</h2>
+    <div className="page-container">
+      <h2 className="page-title">Catálogo de Prestaciones</h2>
 
-      {error && <p style={{ color: "red" }}>{error}</p>}
+      {error && <p style={{ color: '#ef4444', marginBottom: '16px' }}>{error}</p>}
 
       {isAdmin && (
-        <div
-          style={{
-            marginBottom: "30px",
-            padding: "15px",
-            border: "1px solid #ccc",
-          }}
-        >
-          <h3>Agregar Nueva Prestación</h3>
-          <form onSubmit={handleSubmit}>
-            <div style={{ marginBottom: "10px" }}>
-              <label>Nombre: </label>
-              <input
-                type="text"
-                required
-                value={serviceName}
-                onChange={(e) => setServiceName(e.target.value)}
-              />
+        <div className="card">
+          <h3 style={{ marginTop: 0, marginBottom: '24px', color: 'var(--text-h)' }}>Agregar Nueva Prestación</h3>
+          <form onSubmit={handleSubmit} className="form-grid">
+            <div className="form-group">
+              <label className="form-label">Nombre: </label>
+              <input type="text" className="form-control" required value={serviceName} onChange={(e) => setServiceName(e.target.value)} />
             </div>
-            <div style={{ marginBottom: "10px" }}>
-              <label>Descripción: </label>
-              <input
-                type="text"
-                required
-                value={description}
-                onChange={(e) => setDescription(e.target.value)}
-              />
+            <div className="form-group">
+              <label className="form-label">Descripción: </label>
+              <input type="text" className="form-control" required value={description} onChange={(e) => setDescription(e.target.value)} />
             </div>
-            <div style={{ marginBottom: "10px" }}>
-              <label>Precio ($): </label>
-              <input
-                type="number"
-                required
-                min="0"
-                value={price}
-                onChange={(e) => setPrice(e.target.value)}
-              />
+            <div className="form-group">
+              <label className="form-label">Precio ($): </label>
+              <input type="number" className="form-control" required min="0" value={price} onChange={(e) => setPrice(e.target.value)} />
             </div>
-            <button type="submit">Guardar Prestación</button>
+            <div style={{display:'flex', alignItems: 'flex-end'}}>
+              <button type="submit" className="btn-primary" style={{width: '100%'}}>
+                Guardar Prestación
+              </button>
+            </div>
           </form>
         </div>
       )}
 
-      <h3>Prestaciones Disponibles</h3>
-      <table
-        border="1"
-        cellPadding="10"
-        style={{ width: "100%", borderCollapse: "collapse" }}
-      >
+      <h3 style={{ marginBottom: '16px', color: 'var(--text-h)' }}> Prestaciones Disponibles</h3>
+      <div className="table-container">
+      <table className="data-table">
         <thead>
-          <tr style={{ backgroundColor: "#f4f4f4" }}>
+          <tr>
             <th>ID</th>
             <th>Nombre</th>
             <th>Descripción</th>
@@ -151,6 +130,7 @@ export default function Catalog() {
           )}
         </tbody>
       </table>
+     </div> 
     </div>
   );
 }

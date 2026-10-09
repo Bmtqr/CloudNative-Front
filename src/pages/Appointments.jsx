@@ -79,103 +79,60 @@ const Appointments = () => {
   };
 
   return (
-    <div style={{ padding: '20px', maxWidth: '1000px', margin: '0 auto' }}>
-      <h2>Gestión de Atenciones y Citas</h2>
+    <div className="page-container">
+      <h2 className="page-title">Gestión de Atenciones y Citas</h2>
 
       {/* Formulario de Registro */}
-      <div style={{ border: '1px solid #ccc', padding: '20px', borderRadius: '8px', marginBottom: '30px' }}>
-        <h3>Agendar Nueva Atención</h3>
+      <div className="card">
+        <h3 style={{marginTop: 0, marginBottom: '24px', color: 'var(--text-h)'}}>Agendar Nueva Atención</h3>
         
-        {submitError && <p style={{ color: 'red' }}>{submitError}</p>}
+        {submitError && <p style={{ color: '#ef4444' ,marginBottom: '16px'}}>{submitError}</p>}
 
-        <form onSubmit={handleSubmit} style={{ display: 'grid', gap: '12px', maxWidth: '500px' }}>
-          <div>
-            <label>ID Paciente: </label>
-            <input
-              type="number"
-              name="patientId"
-              value={formData.patientId}
-              onChange={handleChange}
-              required
-              style={{ width: '100%', padding: '8px', marginTop: '4px' }}
-            />
+        <form onSubmit={handleSubmit} className="form-grid">
+          <div className="form-group">
+            <label className="form-label">ID Paciente: </label>
+            <input type="number" name="patientId" className="form-control" value={formData.patientId} onChange={handleChange} required />         
           </div>
 
-          <div>
-            <label>Correo del Paciente: </label>
-            <input
-              type="email"
-              name="patientEmail"
-              value={formData.patientEmail}
-              onChange={handleChange}
-              required
-              style={{ width: '100%', padding: '8px', marginTop: '4px' }}
-            />
+          <div className="form-group">
+            <label className="form-label">Correo del Paciente: </label>
+            <input type="email" name="patientEmail" className="form-control" value={formData.patientEmail} onChange={handleChange} required />
+            </div>
+
+          <div className="form-group">
+            <label className="form-label">ID Centro Médico: </label>
+            <input type="number" name="centerId" className="form-control" value={formData.centerId} onChange={handleChange} required />
           </div>
 
-          <div>
-            <label>ID Centro Médico: </label>
-            <input
-              type="number"
-              name="centerId"
-              value={formData.centerId}
-              onChange={handleChange}
-              required
-              style={{ width: '100%', padding: '8px', marginTop: '4px' }}
-            />
+          <div className="form-group">
+            <label className="form-label">ID Servicio / Prestación: </label>
+            <input type="number" name="serviceId" className="form-control" value={formData.serviceId} onChange={handleChange} required />
           </div>
 
-          <div>
-            <label>ID Servicio / Prestación: </label>
-            <input
-              type="number"
-              name="serviceId"
-              value={formData.serviceId}
-              onChange={handleChange}
-              required
-              style={{ width: '100%', padding: '8px', marginTop: '4px' }}
-            />
+          <div className="form-group">
+            <label className="form-label">Fecha de Atención: </label>
+            <input type="date" name="appointmentDate" className="form-control" value={formData.appointmentDate} onChange={handleChange} required />
           </div>
 
-          <div>
-            <label>Fecha de Atención: </label>
-            <input
-              type="date"
-              name="appointmentDate"
-              value={formData.appointmentDate}
-              onChange={handleChange}
-              required
-              style={{ width: '100%', padding: '8px', marginTop: '4px' }}
-            />
-          </div>
-
-          <button
-            type="submit"
-            disabled={submitting}
-            style={{
-              padding: '10px',
-              backgroundColor: '#007bff',
-              color: '#fff',
-              border: 'none',
-              borderRadius: '4px',
-              cursor: submitting ? 'not-allowed' : 'pointer'
-            }}
-          >
+          <div style={{display:'flex', alignItems: 'flex-end'}}>
+            <button type="submit" className="btn-primary" disabled={submitting} style={{width: '100%'}}>
             {submitting ? 'Agendando...' : 'Agendar Cita'}
-          </button>
+            </button>
+          </div>
         </form>
       </div>
 
       {/* Lista de Atenciones */}
-      <h3>Listado de Atenciones Registradas</h3>
+      <h3 style={{marginBottom: '16px', color: 'var(--text-h'}}>Listado de Atenciones Registradas</h3>
 
       {loading && <p>Cargando atenciones...</p>}
-      {error && <p style={{ color: 'red' }}>{error}</p>}
+      {error && <p style={{ color: '#ef4444' }}>{error}</p>}
 
       {!loading && !error && (
-        <table border="1" cellPadding="10" cellSpacing="0" style={{ width: '100%', textWrap: 'nowrap' }}>
+        <div className="table-container">
+        <table  className="data-table">
           <thead>
-            <tr style={{ backgroundColor: '#f2f2f2' }}>
+            <tr>
               <th>ID</th>
               <th>Paciente (ID)</th>
               <th>Email</th>
@@ -209,6 +166,7 @@ const Appointments = () => {
             )}
           </tbody>
         </table>
+      </div>
       )}
     </div>
   );

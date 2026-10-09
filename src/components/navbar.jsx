@@ -32,65 +32,64 @@ export const Navbar = () => {
   };
 
   const linkStyle = (path) => ({
-    color: isActive(path) ? "#ffffff" : "#bdc3c7",
-    textDecoration: "none",
-    fontWeight: isActive(path) ? "bold" : "500",
-    padding: "8px 12px",
-    borderRadius: "8px",
-    backgroundColor: isActive(path) ? "#34495e" : "transparent",
+    color: isActive(path) ? "var(--accent)" : "var(--text)",
+    fontWeight: isActive(path) ? "600" : "500",
+    backgroundColor: isActive(path) ? "var(--bg-app)" : "transparent",
   });
 
   return (
-    <nav
-      style={{display: "flex", justifyContent: "space-between", alignItems: "center", backgroundColor: "#2c3e50", padding: "12px 24px", color: "white"}}>
-      <div style={{ display: "flex", gap: "20px", alignItems: "center" }}>
+    <aside className="sidebar">
+      <Link to="/dashboard" style={{textDecoration:"none"}}>
+        <h2 className="sidebar-title" style={{cursor:"pointer"}}>VidaSalud</h2>
+      </Link>
+      
+        <nav className="sidebar-nav">
 
-        <Link to="/dashboard" style={{ fontSize: "18px", marginRight: "10px", color: "white", textDecoration: "none", fontWeight: "bold"}}>
-          VidaSalud
-        </Link>
-
-        <Link to="/dashboard" style={linkStyle("/dashboard")}>
-          Dashboard
-        </Link>
-
-        <Link to="/appointments" style={linkStyle("/appointments")}>
-          Atenciones
-        </Link>
-
-        {(isRecepcionista || isAdmin) && (
-          <Link to="/catalog" style={linkStyle("/catalog")}>
-            Catálogo
+          <Link to="/dashboard" className="sidebar-link" style={linkStyle("/dashboard")}>
+            Dashboard
           </Link>
-        )}
 
-        {isAdmin && (
-          <Link to="/report" style={linkStyle("/report")}>
-            Reporte
+          <Link to="/appointments" className="sidebar-link" style={linkStyle("/appointments")}>
+            Atenciones
           </Link>
-        )}
-        {(isAdmin || isAuditor) && (
-          <Link to="/audit" style={linkStyle("/audit")}>
-            Audit
-          </Link>
-        )}
+
+          {(isRecepcionista || isAdmin) && (
+            <Link to="/catalog" className="sidebar-link" style={linkStyle("/catalog")}>
+              Catálogo
+            </Link>
+          )}
+
+          {isAdmin && (
+            <Link to="/report" className="sidebar-link" style={linkStyle("/report")}>
+              Reporte
+            </Link>
+          )}
+          {(isAdmin || isAuditor) && (
+            <Link to="/audit" className="sidebar-link" style={linkStyle("/audit")}>
+              Audit
+            </Link>
+          )}
+        </nav>
+      
+      <div style={{marginTop: "auto", paddingTop: "24px", borderTop: "1px solid var(--border)", display: "flex", flexDirection: "column", gap: "16px" }}>
+      <div>
+        <div style={{ fontSize: "14px", fontWeight: "600", color: "var(--text-h)" }}>
+            {accounts[0]?.name || accounts[0]?.username}
+        </div>
+        <div>
+          <span className="badge badge-blue">
+            {userRoles[0] || "Usuario"}
+          </span>
+        </div>
       </div>
+        
 
-      <div style={{ display: "flex", gap: "15px", alignItems: "center" }}>
-        <span style={{ fontSize: "14px", color: "#bdc3c7" }}>
-          {accounts[0]?.name || accounts[0]?.username}
-        </span>
-
-        <span
-          style={{ fontSize: "10px", backgroundColor: "#e67e22", padding: "2px 6px", borderRadius: "4px", textTransform: "uppercase"}}>
-          {userRoles[0] || "Usuario"}
-        </span>
-
-        <button
+      <button
           onClick={handleLogout}
-          style={{ padding: "6px 12px", backgroundColor: "#e74c3c", color: "white", border: "none", borderRadius: "4px", cursor: "pointer"}}>
+          style={{ padding: "8px 12px", backgroundColor: "transparent", color: "#ef4444", border: "1px solid #ef4444", borderRadius: "6px", cursor: "pointer", fontWeight: "600"}}>
           Cerrar Sesión
         </button>
       </div>
-    </nav>
+    </aside>
   );
 };

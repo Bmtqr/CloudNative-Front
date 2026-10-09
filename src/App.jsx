@@ -17,14 +17,18 @@ export default function App() {
 
   return (
     <Router>
+      <div className={isAuthenticated ? "layout-container" : ""}>
       {isAuthenticated && <Navbar />}
-      <Routes>
-        <Route path="/login" element={<Login />} />
-        <Route path="/catalog" element={<ProtectedRoute> <Catalog /> </ProtectedRoute>} />
-        <Route path="/appointments" element={<ProtectedRoute> <Appointments /> </ProtectedRoute>} />
-        <Route path="/dashboard" element={<ProtectedRoute> <Dashboard /> </ProtectedRoute>} />
-        <Route path="*" element={<Navigate to={isAuthenticated ? "/dashboard" : "/login"} replace />} />
-      </Routes>
+      <main className={isAuthenticated ? "main-content" : ""} style={{width: "100%"}}>
+        <Routes>
+          <Route path="/login" element={<Login />} />
+          <Route path="/catalog" element={<ProtectedRoute> <Catalog /> </ProtectedRoute>} />
+          <Route path="/appointments" element={<ProtectedRoute> <Appointments /> </ProtectedRoute>} />
+          <Route path="/dashboard" element={<ProtectedRoute> <Dashboard /> </ProtectedRoute>} />
+          <Route path="*" element={<Navigate to={isAuthenticated ? "/dashboard" : "/login"} replace />} />
+        </Routes>
+      </main>
+      </div>
     </Router>
   );
 }
