@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { getAppointments, createAppointment } from '../services/appointmentService';
+import { getAppointments, createAppointment, deleteAppointment } from '../services/appointmentService';
 
 const Appointments = () => {
   const [appointments, setAppointments] = useState([]);
@@ -7,6 +7,7 @@ const Appointments = () => {
   const [error, setError] = useState(null);
   const [submitError, setSubmitError] = useState(null);
   const [submitting, setSubmitting] = useState(false);
+  const [deletingId, setDeletingId] = useState(null);
 
   // Estado para el formulario de agendamiento
   const [formData, setFormData] = useState({
@@ -78,6 +79,25 @@ const Appointments = () => {
     }
   };
 
+  const handleDelete = async (id) => {
+    const confirmDelete = window.confirm(`¿Estás seguro de que deseas eliminar la atención #${id}?`);
+    if (!confirmDelete) return;
+
+    try {
+      setDeletingId(id);
+      if (typeof deleteAppointment === 'function') {
+        await deleteAppointment(id);
+      }
+      // Actualizar la lista localmente de inmediato
+      setAppointments((prev) => prev.filter((item) => item.id !== id));
+    } catch (err) {
+      console.error('Error al eliminar la atención:', err);
+      alert('No se pudo eliminar la atención.');
+    } finally {
+      setDeletingId(null);
+    }
+  };
+
   return (
     <div className="page-container">
       <h2 className="page-title">Gestión de Atenciones y Citas</h2>
@@ -140,12 +160,13 @@ const Appointments = () => {
               <th>Servicio</th>
               <th>Fecha</th>
               <th>Estado</th>
+              <th style={{ textAlign: 'center' }}>Acciones</th>
             </tr>
           </thead>
           <tbody>
             {appointments.length === 0 ? (
               <tr>
-                <td colSpan="7" style={{ textAlign: 'center' }}>
+                <td colSpan="8" style={{ textAlign: 'center' }}>
                   No hay atenciones registradas.
                 </td>
               </tr>
@@ -160,6 +181,27 @@ const Appointments = () => {
                   <td>{item.appointmentDate}</td>
                   <td>
                     <strong>{item.status || 'SOLICITADA'}</strong>
+                  </td>
+                  <td style={{ textAlign: 'center' }}>
+                    <button
+                      type="button"
+                      onClick={() => handleDelete(item.id)}
+                      disabled={deletingId === item.id}
+                      style={{
+                        backgroundColor: '#fee2e2',
+                        color: '#b91c1c',
+                        border: '1px solid #fca5a5',
+                        borderRadius: '6px',
+                        padding: '6px 12px',
+                        fontSize: '0.875rem',
+                        fontWeight: '500',
+                        cursor: deletingId === item.id ? 'not-allowed' : 'pointer',
+                        opacity: deletingId === item.id ? 0.6 : 1,
+                        transition: 'all 0.2s ease'
+                      }}
+                    >
+                      {deletingId === item.id ? 'Eliminando...' : 'Eliminar'}
+                    </button>
                   </td>
                 </tr>
               ))

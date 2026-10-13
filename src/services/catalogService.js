@@ -17,3 +17,8 @@ export const updateServiceQuota = async (id, data) => {
   const response = await api.put(`/catalog/services/${id}`, data);
   return response.data;
 };
+
+export const deleteService = async (id) => {
+  const response = await api.delete(`/catalog/services/${id}`);
+  return response.data;
+};

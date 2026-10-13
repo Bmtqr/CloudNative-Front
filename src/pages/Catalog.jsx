@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { getServices, createService } from "../services/catalogService";
+import { getServices, createService, deleteService } from "../services/catalogService";
 
 import { useMsal } from "@azure/msal-react";
 import {fetchUserRoles} from "../utils/token";
@@ -10,6 +10,7 @@ export default function Catalog() {
   const [services, setServices] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [deletingId, setDeletingId] = useState(null);
 
   const [serviceName, setServiceName] = useState("");
   const [description, setDescription] = useState("");
@@ -65,6 +66,25 @@ export default function Catalog() {
     }
   };
 
+  const handleDelete = async (id) => {
+      const confirmDelete = window.confirm(`¿Estás seguro de que deseas eliminar la prestación #${id}?`);
+      if (!confirmDelete) return;
+  
+      try {
+        setDeletingId(id);
+        if (typeof deleteService === 'function') {
+          await deleteService(id);
+        }
+        // Actualizar la lista localmente de inmediato
+        setServices((prev) => prev.filter((s) => s.id !== id));
+      } catch (err) {
+        console.error('Error al eliminar la prestación:', err);
+        alert('No se pudo eliminar la prestación.');
+      } finally {
+        setDeletingId(null);
+      }
+    };
+
   if (loading) return <div className="page-container"><p>Cargando catálogo...</p></div>;
 
   return (
@@ -108,12 +128,13 @@ export default function Catalog() {
             <th>Descripción</th>
             <th>Precio</th>
             <th>Estado</th>
+            <th style={{ textAlign: 'center' }}>Acciones</th>
           </tr>
         </thead>
         <tbody>
           {services.length === 0 ? (
             <tr>
-              <td colSpan="5" style={{ textAlign: "center" }}>
+              <td colSpan="6" style={{ textAlign: "center" }}>
                 No hay prestaciones registradas.
               </td>
             </tr>
@@ -125,7 +146,29 @@ export default function Catalog() {
                 <td>{s.description}</td>
                 <td>${s.price}</td>
                 <td>{s.isActive ? "Activo" : "Inactivo"}</td>
+                <td style={{ textAlign: 'center' }}>
+                    <button
+                      type="button"
+                      onClick={() => handleDelete(s.id)}
+                      disabled={deletingId === s.id}
+                      style={{
+                        backgroundColor: '#fee2e2',
+                        color: '#b91c1c',
+                        border: '1px solid #fca5a5',
+                        borderRadius: '6px',
+                        padding: '6px 12px',
+                        fontSize: '0.875rem',
+                        fontWeight: '500',
+                        cursor: deletingId === s.id ? 'not-allowed' : 'pointer',
+                        opacity: deletingId === s.id ? 0.6 : 1,
+                        transition: 'all 0.2s ease'
+                      }}
+                    >
+                      {deletingId === s.id ? 'Eliminando...' : 'Eliminar'}
+                    </button>
+                  </td>
               </tr>
+              
             ))
           )}
         </tbody>
