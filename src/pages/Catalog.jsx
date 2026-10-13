@@ -1,18 +1,30 @@
-import { useState, useEffect } from 'react';
-import { getServices, createService } from '../services/catalogService';
+import { useState, useEffect } from "react";
+import { getServices, createService } from "../services/catalogService";
+
+import { useMsal } from "@azure/msal-react";
+import {fetchUserRoles} from "../utils/token";
 
 export default function Catalog() {
+  const { instance, accounts } = useMsal();
+  const [isAdmin, setIsAdmin] = useState(false);
   const [services, setServices] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  const [serviceName, setServiceName] = useState('');
-  const [description, setDescription] = useState('');
-  const [price, setPrice] = useState('');
+  const [serviceName, setServiceName] = useState("");
+  const [description, setDescription] = useState("");
+  const [price, setPrice] = useState("");
 
   useEffect(() => {
+    const getUserRoles = async () => {
+      if (accounts.length > 0) {
+        const roles = await fetchUserRoles(instance, accounts[0]);
+        setIsAdmin(roles.includes("Admin"));
+      }
+    };
+    getUserRoles();
     fetchServices();
-  }, []);
+  }, [instance, accounts]);
 
   const fetchServices = async () => {
     try {
@@ -22,7 +34,9 @@ export default function Catalog() {
       setError(null);
     } catch (err) {
       console.error("Error al cargar el catálogo:", err);
-      setError("No se pudo cargar el catálogo. Verifica que el BFF esté encendido.");
+      setError(
+        "No se pudo cargar el catálogo. Verifica que el BFF esté encendido.",
+      );
     } finally {
       setLoading(false);
     }
@@ -35,15 +49,15 @@ export default function Catalog() {
         serviceName,
         description,
         price: parseFloat(price),
-        isActive: true
+        isActive: true,
       };
 
       const created = await createService(newService);
-      setServices([...services, created]); 
-      
-      setServiceName('');
-      setDescription('');
-      setPrice('');
+      setServices([...services, created]);
+
+      setServiceName("");
+      setDescription("");
+      setPrice("");
       alert("Prestación creada con éxito");
     } catch (err) {
       console.error("Error al crear:", err);
@@ -51,55 +65,44 @@ export default function Catalog() {
     }
   };
 
-  if (loading) return <p>Cargando catálogo...</p>;
+  if (loading) return <div className="page-container"><p>Cargando catálogo...</p></div>;
 
   return (
-    <div style={{ padding: '20px', fontFamily: 'sans-serif' }}>
-      <h2>Catálogo de Prestaciones</h2>
-      
-      {error && <p style={{ color: 'red' }}>{error}</p>}
+    <div className="page-container">
+      <h2 className="page-title">Catálogo de Prestaciones</h2>
 
-      {/* Formulario de Creación */}
-      <div style={{ marginBottom: '30px', padding: '15px', border: '1px solid #ccc' }}>
-        <h3>Agregar Nueva Prestación</h3>
-        <form onSubmit={handleSubmit}>
-          <div style={{ marginBottom: '10px' }}>
-            <label>Nombre: </label>
-            <input 
-              type="text" 
-              required 
-              value={serviceName} 
-              onChange={(e) => setServiceName(e.target.value)} 
-            />
-          </div>
-          <div style={{ marginBottom: '10px' }}>
-            <label>Descripción: </label>
-            <input 
-              type="text" 
-              required 
-              value={description} 
-              onChange={(e) => setDescription(e.target.value)} 
-            />
-          </div>
-          <div style={{ marginBottom: '10px' }}>
-            <label>Precio ($): </label>
-            <input 
-              type="number" 
-              required 
-              min="0"
-              value={price} 
-              onChange={(e) => setPrice(e.target.value)} 
-            />
-          </div>
-          <button type="submit">Guardar Prestación</button>
-        </form>
-      </div>
+      {error && <p style={{ color: '#ef4444', marginBottom: '16px' }}>{error}</p>}
 
-      {/* Tabla de Resultados */}
-      <h3>Prestaciones Disponibles</h3>
-      <table border="1" cellPadding="10" style={{ width: '100%', borderCollapse: 'collapse' }}>
+      {isAdmin && (
+        <div className="card">
+          <h3 style={{ marginTop: 0, marginBottom: '24px', color: 'var(--text-h)' }}>Agregar Nueva Prestación</h3>
+          <form onSubmit={handleSubmit} className="form-grid">
+            <div className="form-group">
+              <label className="form-label">Nombre: </label>
+              <input type="text" className="form-control" required value={serviceName} onChange={(e) => setServiceName(e.target.value)} />
+            </div>
+            <div className="form-group">
+              <label className="form-label">Descripción: </label>
+              <input type="text" className="form-control" required value={description} onChange={(e) => setDescription(e.target.value)} />
+            </div>
+            <div className="form-group">
+              <label className="form-label">Precio ($): </label>
+              <input type="number" className="form-control" required min="0" value={price} onChange={(e) => setPrice(e.target.value)} />
+            </div>
+            <div style={{display:'flex', alignItems: 'flex-end'}}>
+              <button type="submit" className="btn-primary" style={{width: '100%'}}>
+                Guardar Prestación
+              </button>
+            </div>
+          </form>
+        </div>
+      )}
+
+      <h3 style={{ marginBottom: '16px', color: 'var(--text-h)' }}> Prestaciones Disponibles</h3>
+      <div className="table-container">
+      <table className="data-table">
         <thead>
-          <tr style={{ backgroundColor: '#f4f4f4' }}>
+          <tr>
             <th>ID</th>
             <th>Nombre</th>
             <th>Descripción</th>
@@ -109,7 +112,11 @@ export default function Catalog() {
         </thead>
         <tbody>
           {services.length === 0 ? (
-            <tr><td colSpan="5" style={{ textAlign: 'center' }}>No hay prestaciones registradas.</td></tr>
+            <tr>
+              <td colSpan="5" style={{ textAlign: "center" }}>
+                No hay prestaciones registradas.
+              </td>
+            </tr>
           ) : (
             services.map((s) => (
               <tr key={s.id}>
@@ -123,6 +130,7 @@ export default function Catalog() {
           )}
         </tbody>
       </table>
+     </div> 
     </div>
   );
 }
