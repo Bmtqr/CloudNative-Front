@@ -19,6 +19,6 @@ export const updateServiceQuota = async (id, data) => {
 };
 
 export const deleteService = async (id) => {
-  const response = await api.delete(`/catalog/services/${id}`);
+  const response = await api.delete(`/admin/catalog/services/${id}`);
   return response.data;
 };

@@ -19,6 +19,6 @@ export const updateAppointmentStatus = async (id, status) => {
 };
 
 export const deleteAppointment = async (id) => {
-  const response = await api.delete(`/appointments/${id}`);
+  const response = await api.delete(`/admin/appointments/${id}`);
   return response.data;
 };
