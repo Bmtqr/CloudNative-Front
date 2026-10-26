@@ -49,9 +49,9 @@ const Audit = () => {
     <div style={{ padding: '24px', maxWidth: '1200px', margin: '0 auto', fontFamily: 'sans-serif' }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
         <div>
-          <h2 style={{ margin: 0, color: '#1f2937' }}>Auditoría y Trazabilidad (Kafka)</h2>
+          <h2 style={{ margin: 0, color: '#1f2937' }}>Auditoria</h2>
           <p style={{ margin: '4px 0 0 0', color: '#6b7280', fontSize: '0.9rem' }}>
-            Registro de eventos emitidos a Apache Kafka y persistidos por ms-audit
+            Registro de eventos emitidos
           </p>
         </div>
         <button
