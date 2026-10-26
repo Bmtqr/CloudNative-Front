@@ -58,12 +58,6 @@ export const Navbar = () => {
               Catálogo
             </Link>
           )}
-
-          {isAdmin && (
-            <Link to="/report" className="sidebar-link" style={linkStyle("/report")}>
-              Reporte
-            </Link>
-          )}
           {(isAdmin || isAuditor) && (
             <Link to="/audit" className="sidebar-link" style={linkStyle("/audit")}>
               Audit

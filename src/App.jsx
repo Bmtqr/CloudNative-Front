@@ -5,6 +5,7 @@ import Login from "./pages/Login";
 import Catalog from "./pages/Catalog";
 import Appointments from "./pages/Appointments";
 import Dashboard from "./pages/Dashboard";
+import Audit from "./pages/Audit";
 import { Navbar } from "./components/navbar";
 
 function ProtectedRoute({ children }) {
@@ -25,6 +26,7 @@ export default function App() {
           <Route path="/catalog" element={<ProtectedRoute> <Catalog /> </ProtectedRoute>} />
           <Route path="/appointments" element={<ProtectedRoute> <Appointments /> </ProtectedRoute>} />
           <Route path="/dashboard" element={<ProtectedRoute> <Dashboard /> </ProtectedRoute>} />
+          <Route path="/audit" element={<ProtectedRoute> <Audit /> </ProtectedRoute>} />
           <Route path="*" element={<Navigate to={isAuthenticated ? "/dashboard" : "/login"} replace />} />
         </Routes>
       </main>
